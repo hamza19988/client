@@ -1,0 +1,94 @@
+import React, { useState, useEffect } from 'react';
+import { View, TextInput, TouchableOpacity, StyleSheet, Alert, Image, Animated, Text } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import User from './User';
+
+const LoginScreen = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [logoAnim] = useState(new Animated.Value(0));
+  const navigation = useNavigation();
+
+  useEffect(() => {
+    Animated.timing(logoAnim, {
+      toValue: 1,
+      duration: 1000,
+      useNativeDriver: true,
+    }).start();
+  }, []);
+
+  const handleLogin = () => {
+    if (email === 'user@cnx.com' && password === 'usercnx') {
+      navigation.navigate('User');
+    } else {
+      Alert.alert('Error', 'Invalid email or password. Please try again.');
+    }
+  };
+
+  return (
+    <View style={styles.container}>
+      <Animated.Image
+        source={require('../assets/images/logo.png')}
+        style={[styles.logo, { opacity: logoAnim }]}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Email"
+        autoCapitalize="none"
+        onChangeText={(text) => setEmail(text)}
+        value={email}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Password"
+        secureTextEntry={true}
+        onChangeText={(text) => setPassword(text)}
+        value={password}
+      />
+      <TouchableOpacity style={styles.buttonContainer} onPress={handleLogin}>
+        <View style={styles.button}>
+          <Text style={styles.buttonText}>LOGIN</Text>
+        </View>
+      </TouchableOpacity>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  logo: {
+    width: 150,
+    height: 150,
+    marginBottom: 50,
+  },
+  input: {
+    width: '80%',
+    height: 40,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 5,
+    paddingHorizontal: 10,
+    marginBottom: 20,
+  },
+  buttonContainer: {
+    width: '80%',
+    alignItems: 'center',
+  },
+  button: {
+    backgroundColor: '#428bca',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 18,
+  },
+});
+
+export default LoginScreen;
